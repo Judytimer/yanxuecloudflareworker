@@ -17,9 +17,10 @@ export function buildMessageHistory(
     { role: 'system', content: SYSTEM_PROMPT },
   ];
 
-  // 添加历史消息（最多保留最近10轮）
+  // 添加历史消息（最多保留最近10轮，每轮包含 user + assistant 共2条消息）
   if (history && history.length > 0) {
-    const recentHistory = history.slice(-10);
+    // 保留最后20条消息（10轮对话）
+    const recentHistory = history.slice(-20);
     recentHistory.forEach((msg) => {
       messages.push({
         role: msg.role.toLowerCase() as 'user' | 'assistant',

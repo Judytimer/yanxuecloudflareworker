@@ -53,9 +53,48 @@ npm install
 npm run dev
 ```
 
+## 测试
+
+### Worker 测试
+
+在部署 Worker 之前，建议先运行测试确保代码正常工作：
+
+```bash
+cd worker
+npm test              # 运行测试（watch 模式）
+npm run test:run      # 运行测试一次（CI/CD 使用）
+npm run test:ui       # 打开测试 UI 界面
+```
+
+**测试覆盖范围**：
+- ✅ Worker 入口（CORS、GraphQL 请求处理）
+- ✅ 输入验证（空消息、长度限制）
+- ✅ 消息历史构建
+- ✅ GraphQL Resolvers（成功场景、错误处理）
+
+**测试前准备**：
+- 测试使用模拟的 DeepSeek API，无需真实的 API 密钥
+- 所有测试都在本地运行，不会调用外部 API
+
+**部署前检查清单**：
+1. ✅ 运行 `npm run test:run` 确保所有测试通过
+2. ✅ 运行 `npm run type-check` 确保没有类型错误
+3. ✅ 运行 `npm run dev` 本地测试功能
+
 ## 部署
 
 ### Worker 部署
+
+**⚠️ 重要：部署前请先运行测试！**
+
+```bash
+cd worker
+npm run test:run      # 运行测试确保代码正常
+npm run type-check    # 检查类型错误
+npm run deploy        # 部署到 Cloudflare
+```
+
+或者使用 wrangler 直接部署：
 
 ```bash
 cd worker
