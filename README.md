@@ -23,14 +23,27 @@ cloudflare/
 
 ## 快速开始
 
+### 1. 申请 DeepSeek API 密钥
+
+1. 访问 [DeepSeek 开放平台](https://platform.deepseek.com/)
+2. 注册/登录账户
+3. 在控制台创建 API 密钥（格式：`sk-xxx`）
+4. 查看 [API 文档](https://platform.deepseek.com/api-docs/)
+
 ### 后端 (Worker)
 
 ```bash
 cd worker
 npm install
-wrangler secret put DEEPSEEK_API_KEY  # 设置API密钥
+npx wrangler login  # 登录 Cloudflare（会打开浏览器授权）
+npx wrangler secret put DEEPSEEK_API_KEY  # 设置API密钥（会提示输入密钥）
 npm run dev
 ```
+
+**注意**：
+- 使用 `npx wrangler` 而不是直接使用 `wrangler` 命令
+- 设置密钥前需要先登录 Cloudflare（`npx wrangler login`）
+- 或设置 `CLOUDFLARE_API_TOKEN` 环境变量
 
 ### 前端
 
@@ -58,6 +71,10 @@ wrangler deploy
 ### Worker
 
 - `DEEPSEEK_API_KEY`: DeepSeek API 密钥
+  - 申请地址：https://platform.deepseek.com/
+  - API 文档：https://platform.deepseek.com/api-docs/
+  - API 端点：https://api.deepseek.com/v1/chat/completions
+  - 使用 `wrangler secret put DEEPSEEK_API_KEY` 设置密钥
 
 ### Frontend
 

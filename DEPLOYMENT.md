@@ -6,6 +6,27 @@
 2. 域名 antech.store 已配置到 Cloudflare
 3. DeepSeek API 密钥
 
+### 申请 DeepSeek API 密钥
+
+1. **访问 DeepSeek 开放平台**
+   - 官网：https://www.deepseek.com/
+   - API 平台：https://platform.deepseek.com/
+   - API 文档：https://platform.deepseek.com/api-docs/
+
+2. **注册/登录账户**
+   - 使用邮箱或手机号注册
+   - 登录后进入控制台
+
+3. **创建 API 密钥**
+   - 在控制台的"API 管理"页面创建密钥
+   - 密钥格式：`sk-xxx`（以 `sk-` 开头）
+   - **重要**：密钥仅显示一次，请立即复制保存
+
+4. **API 信息**
+   - API 端点：`https://api.deepseek.com/v1/chat/completions`
+   - 模型：`deepseek-chat`
+   - 新用户通常有免费额度（如 50 万 Tokens）
+
 ## 后端部署 (Worker)
 
 ### 1. 安装依赖
@@ -17,9 +38,31 @@ npm install
 
 ### 2. 设置环境变量
 
+**方式1：交互式设置（推荐）**
 ```bash
+cd worker
 wrangler secret put DEEPSEEK_API_KEY
-# 输入你的 DeepSeek API 密钥（格式：sk-xxx）
+# 按提示输入你的 DeepSeek API 密钥（格式：sk-xxx）
+```
+
+**方式2：使用环境变量（非交互式）**
+```bash
+# 先设置 Cloudflare API Token（如果未登录）
+export CLOUDFLARE_API_TOKEN=your_cloudflare_api_token
+
+# 然后设置 DeepSeek API 密钥
+echo "sk-xxx" | wrangler secret put DEEPSEEK_API_KEY
+```
+
+**方式3：先登录 Cloudflare**
+```bash
+wrangler login
+wrangler secret put DEEPSEEK_API_KEY
+```
+
+**验证密钥是否设置成功：**
+```bash
+wrangler secret list
 ```
 
 ### 3. 配置域名路由
@@ -72,10 +115,18 @@ wrangler pages deploy dist --project-name=antech-frontend
 
 ### Worker 环境变量
 
+**DEEPSEEK_API_KEY** - DeepSeek API 密钥
+
 通过 Wrangler Secrets 设置：
 ```bash
 wrangler secret put DEEPSEEK_API_KEY
 ```
+
+**DeepSeek API 相关信息：**
+- 申请地址：https://platform.deepseek.com/
+- API 文档：https://platform.deepseek.com/api-docs/
+- API 端点：https://api.deepseek.com/v1/chat/completions
+- 模型名称：deepseek-chat
 
 ### Frontend 环境变量
 
