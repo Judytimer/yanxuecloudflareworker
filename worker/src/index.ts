@@ -1,4 +1,4 @@
-import { createYoga } from '@graphql-yoga/cloudflare';
+import { createYoga } from 'graphql-yoga';
 import { schema } from './graphql/schema';
 import { resolvers } from './graphql/resolvers';
 import { Env } from './types/env';
