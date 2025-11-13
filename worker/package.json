@@ -1,0 +1,22 @@
+{
+  "name": "antech-worker",
+  "version": "1.0.0",
+  "description": "AI Learning Assistant Backend - Cloudflare Workers",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@graphql-yoga/cloudflare": "^5.0.0",
+    "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.19.0"
+  }
+}
+
