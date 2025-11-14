@@ -1,24 +1,16 @@
-# Antech Learning Assistant
+# Antech Learning Assistant - Worker
 
-AI学习辅导聊天助手 - 帮助厌学孩子重新发现学习的意义
+AI学习辅导聊天助手后端 - Cloudflare Workers 实现
 
 ## 项目结构
 
 ```
-cloudflare/
-├── worker/          # Cloudflare Workers 后端
-│   ├── src/
-│   │   ├── graphql/ # GraphQL Schema 和 Resolvers
-│   │   ├── ai/      # DeepSeek API 集成
-│   │   └── utils/   # 工具函数
-│   └── wrangler.toml
-│
-└── frontend/        # React 前端应用
-    ├── src/
-    │   ├── components/  # React 组件
-    │   ├── graphql/     # GraphQL 客户端
-    │   └── types/       # TypeScript 类型
-    └── vite.config.ts
+worker/
+├── src/
+│   ├── graphql/     # GraphQL Schema 和 Resolvers
+│   ├── ai/          # DeepSeek API 集成
+│   └── utils/       # 工具函数
+└── wrangler.toml
 ```
 
 ## 快速开始
@@ -30,14 +22,18 @@ cloudflare/
 3. 在控制台创建 API 密钥（格式：`sk-xxx`）
 4. 查看 [API 文档](https://platform.deepseek.com/api-docs/)
 
-### 后端 (Worker)
+### 2. 安装依赖
 
 ```bash
 cd worker
 npm install
+```
+
+### 3. 配置 Cloudflare
+
+```bash
 npx wrangler login  # 登录 Cloudflare（会打开浏览器授权）
 npx wrangler secret put DEEPSEEK_API_KEY  # 设置API密钥（会提示输入密钥）
-npm run dev
 ```
 
 **注意**：
@@ -45,17 +41,13 @@ npm run dev
 - 设置密钥前需要先登录 Cloudflare（`npx wrangler login`）
 - 或设置 `CLOUDFLARE_API_TOKEN` 环境变量
 
-### 前端
+### 4. 本地开发
 
 ```bash
-cd frontend
-npm install
 npm run dev
 ```
 
 ## 测试
-
-### Worker 测试
 
 在部署 Worker 之前，建议先运行测试确保代码正常工作：
 
@@ -83,27 +75,25 @@ npm run test:ui       # 打开测试 UI 界面
 
 ## 部署
 
-### Worker 部署
-
 **⚠️ 重要：部署前请先运行测试！**
 
 ```bash
 cd worker
 npm run test:run      # 运行测试确保代码正常
 npm run type-check    # 检查类型错误
-npm run deploy        # 部署到 Cloudflare
+npm run deploy        # 部署到 Cloudflare（使用生产环境）
 ```
 
 或者使用 wrangler 直接部署：
 
 ```bash
 cd worker
-wrangler deploy
+npx wrangler deploy --env production
 ```
 
-### Frontend 部署
-
-使用 Cloudflare Pages 或 GitHub Actions 自动部署。
+**重要提示**：
+- 必须使用 `--env production` 参数，否则路由配置不会被应用
+- 部署后路由 `api.antech.store` 会自动绑定
 
 ## 环境变量
 
@@ -115,7 +105,16 @@ wrangler deploy
   - API 端点：https://api.deepseek.com/v1/chat/completions
   - 使用 `wrangler secret put DEEPSEEK_API_KEY` 设置密钥
 
-### Frontend
+## API 端点
 
-- `VITE_API_URL`: GraphQL API 地址（默认: https://api.antech.store/graphql）
+部署成功后，GraphQL API 可通过以下地址访问：
+
+```
+https://api.antech.store/graphql
+```
+
+## 相关文档
+
+- [部署指南](DEPLOYMENT.md) - 详细的部署说明
+- [实施总结](IMPLEMENTATION_SUMMARY.md) - 项目实现细节
 

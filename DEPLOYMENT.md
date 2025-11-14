@@ -27,7 +27,7 @@
    - 模型：`deepseek-chat`
    - 新用户通常有免费额度（如 50 万 Tokens）
 
-## 后端部署 (Worker)
+## Worker 部署
 
 ### 1. 安装依赖
 
@@ -78,38 +78,16 @@ routes = [
 
 ### 4. 部署
 
-```bash
-wrangler deploy
-```
-
-## 前端部署 (Pages)
-
-### 方式1: 使用 Cloudflare Pages Dashboard
-
-1. 登录 Cloudflare Dashboard
-2. 进入 Pages
-3. 创建新项目，连接 GitHub 仓库
-4. 设置构建配置：
-   - 构建命令：`cd frontend && npm run build`
-   - 输出目录：`frontend/dist`
-   - 根目录：`frontend`
-
-### 方式2: 使用 Wrangler CLI
+**重要：必须使用 --env production 参数，否则路由配置不会被应用！**
 
 ```bash
-cd frontend
-npm install
-npm run build
-wrangler pages deploy dist --project-name=antech-frontend
+wrangler deploy --env production
 ```
 
-### 方式3: 使用 GitHub Actions (自动部署)
-
-1. 在 GitHub Secrets 中设置：
-   - `CLOUDFLARE_API_TOKEN`: Cloudflare API Token
-   - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare Account ID
-
-2. 推送代码到 main 分支，GitHub Actions 会自动部署
+或者使用 npm 脚本：
+```bash
+npm run deploy
+```
 
 ## 环境变量配置
 
@@ -128,16 +106,6 @@ wrangler secret put DEEPSEEK_API_KEY
 - API 端点：https://api.deepseek.com/v1/chat/completions
 - 模型名称：deepseek-chat
 
-### Frontend 环境变量
-
-在 Cloudflare Pages 设置中添加环境变量：
-- `VITE_API_URL`: `https://api.antech.store/graphql`
-
-或在 `frontend/.env` 文件中设置（仅开发环境）：
-```
-VITE_API_URL=https://api.antech.store/graphql
-```
-
 ## 验证部署
 
 ### 测试 Worker API
@@ -150,10 +118,6 @@ curl -X POST https://api.antech.store/graphql \
   }'
 ```
 
-### 测试前端
-
-访问 https://antech.store，点击"开始对话"按钮，测试聊天功能。
-
 ## 故障排查
 
 ### Worker 部署失败
@@ -162,15 +126,10 @@ curl -X POST https://api.antech.store/graphql \
 2. 确认 API 密钥已设置：`wrangler secret list`
 3. 查看日志：`wrangler tail`
 
-### Pages 部署失败
-
-1. 检查构建日志
-2. 确认构建命令和输出目录正确
-3. 检查环境变量配置
-
 ### API 连接失败
 
 1. 确认 Worker 已部署并运行
 2. 检查 CORS 配置
-3. 确认前端环境变量 `VITE_API_URL` 正确
+3. 确认部署时使用了 `--env production` 参数
+4. 检查 Cloudflare Dashboard 中的路由配置
 
