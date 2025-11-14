@@ -8,4 +8,5 @@ dist/
 
 # Archive folders (历史文档，不需要上传到 GitHub)
 worker/archive/
+docs/
 
