@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - master  # 支持 master 分支
 
 jobs:
   deploy-worker:
@@ -26,27 +27,28 @@ jobs:
           workingDirectory: worker
           command: deploy --env production
 
-  deploy-pages:
-    name: Deploy Cloudflare Pages
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - name: Install dependencies
-        run: |
-          cd frontend
-          npm ci
-      - name: Build
-        run: |
-          cd frontend
-          npm run build
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: antech-frontend
-          directory: frontend/dist
+  # Frontend 部署任务已禁用，因为不需要部署 frontend
+  # deploy-pages:
+  #   name: Deploy Cloudflare Pages
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '18'
+  #     - name: Install dependencies
+  #       run: |
+  #         cd frontend
+  #         npm ci
+  #     - name: Build
+  #       run: |
+  #         cd frontend
+  #         npm run build
+  #     - name: Deploy to Cloudflare Pages
+  #       uses: cloudflare/pages-action@v1
+  #       with:
+  #         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  #         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  #         projectName: antech-frontend
+  #         directory: frontend/dist
 
