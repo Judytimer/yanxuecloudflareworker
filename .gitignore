@@ -6,3 +6,6 @@ node_modules/
 dist/
 .wrangler/
 
+# Archive folders (历史文档，不需要上传到 GitHub)
+worker/archive/
+
